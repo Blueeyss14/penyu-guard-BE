@@ -4,3 +4,4 @@ node_modules
 deploy.js
 update_code.js
 fix_db.js
+seed_db.js

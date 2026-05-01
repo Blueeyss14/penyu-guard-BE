@@ -71,7 +71,14 @@ app.get('/api/data/realtime', (req, res) => {
 
 app.get('/api/history/weekly', (req, res) => {
     db.query(
-        'SELECT * FROM sensor_data WHERE created_at >= DATE_SUB(NOW(), INTERVAL 1 WEEK) ORDER BY created_at ASC',
+        `SELECT 
+            DATE_FORMAT(MIN(created_at), '%Y-%m-%dT%H:00:00.000Z') as created_at, 
+            AVG(turbidity) as turbidity, 
+            AVG(ph) as ph 
+         FROM sensor_data 
+         WHERE created_at >= DATE_SUB(NOW(), INTERVAL 1 WEEK) 
+         GROUP BY DATE(created_at), HOUR(created_at) 
+         ORDER BY MIN(created_at) ASC`,
         (err, results) => {
             if (err) return res.status(500).json({ error: err.message });
             res.json(results);
