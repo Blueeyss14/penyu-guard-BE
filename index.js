@@ -83,3 +83,13 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
+
+setInterval(() => {
+    db.query(
+        'DELETE FROM sensor_data WHERE created_at < DATE_SUB(NOW(), INTERVAL 1 WEEK)',
+        (err, result) => {
+            if (err) console.error('Failed to clean up old data:', err);
+            else if (result.affectedRows > 0) console.log(`Cleaned up ${result.affectedRows} old records.`);
+        }
+    );
+}, 3600000);

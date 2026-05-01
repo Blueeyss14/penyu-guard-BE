@@ -1,2 +1,6 @@
 node_modules
 .env
+
+deploy.js
+update_code.js
+fix_db.js
